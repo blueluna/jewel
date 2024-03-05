@@ -482,7 +482,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "jewel-embassy-nrf52840-examples"
+name = "jewel-embassy-nrf52833-examples"
 version = "0.1.0"
 dependencies = [
  "cortex-m",

@@ -30,6 +30,7 @@ impl<'d, T: Instance> Radio for RadioImpl<'d, T> {
         self.radio.set_mode(embassy_mode);
     }
 
+    #[cfg(not(feature = "nrf51"))]
     fn set_tx_power(&mut self, power_db: i8) {
         let tx_power: TxPower = match power_db {
             8..=i8::MAX => TxPower::POS8D_BM,
@@ -47,6 +48,22 @@ impl<'d, T: Instance> Radio for RadioImpl<'d, T> {
             -29..=-20 => TxPower::NEG20D_BM,
             -39..=-30 => TxPower::NEG30D_BM,
             i8::MIN..=-40 => TxPower::NEG40D_BM,
+        };
+
+        self.radio.set_tx_power(tx_power)
+    }
+
+    #[cfg(feature = "nrf51")]
+    fn set_tx_power(&mut self, power_db: i8) {
+        let tx_power: TxPower = match power_db {
+            1..=i8::MAX => TxPower::POS4D_BM,
+            -3..=0 => TxPower::_0D_BM,
+            -7..=-4 => TxPower::NEG4D_BM,
+            -11..=-8 => TxPower::NEG8D_BM,
+            -15..=-12 => TxPower::NEG12D_BM,
+            -19..=-16 => TxPower::NEG16D_BM,
+            -29..=-20 => TxPower::NEG20D_BM,
+            i8::MIN..=-30 => TxPower::NEG30D_BM,
         };
 
         self.radio.set_tx_power(tx_power)
